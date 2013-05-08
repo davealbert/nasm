@@ -1,0 +1,3 @@
+nasm -f elf64 src/print_int.nasm -o lib/print_int.o
+ld -s lib/add.o -o bin/add
+objdump -d bin/forloop -M intel |less
