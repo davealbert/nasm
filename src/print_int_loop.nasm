@@ -1,20 +1,24 @@
-sys_exit        equ     1
-sys_write       equ     4
-stdout          equ     1
-endOfLine				db  		0x0A
-endOfLineLen 		equ 		$-endOfLine
-
+section .data
+	sys_exit        equ     1
+	sys_write       equ     4
+	stdout          equ     1
+	endOfLine				db  		0x0A
+	endOfLineLen 		equ 		$-endOfLine
+	ESC 						equ 		033q
+	SII 						equ 		017q
+	BOTTOMROW 			equ 		'24'
 
 section .bss
-	outputBuffer    resb    4
-
+	outputBuffer    resb 		4
+	outbuf 					resb 		4692
 
 section .text
 	global _start
 
 
 _start:
-	mov  esi, -9  							; Number 1
+	;call _clearScreen
+	mov  esi, -1  						; Number -1
 	call loop
 	call _exit
 
@@ -25,7 +29,7 @@ loop:
 	mov  [outputBuffer], esi 	; Save number in buffer
 	sub  esi, 0x30
 	call _print
-	cmp  esi, 10
+	cmp  esi, 9
 	jl   loop 
 	ret
 
@@ -46,6 +50,21 @@ _newLine:
 	mov  eax, sys_write 			; sys_write
 	mov  ebx, stdout      		; to STDOUT
 	int  0x80
+	ret
+
+_clearScreen:
+	mov eax, ESC | ('[' << 8) | (BOTTOMROW << 16)
+	stosd
+	mov eax, ';0H' | (SII << 24)
+	stosd
+	mov edx, edi
+	mov edi, outbuf
+	mov ecx, edi
+	sub edx, ecx
+	xor ebx, ebx
+	lea eax, [byte ebx + sys_write]
+	inc ebx
+	int 0x80
 	ret
 
 
