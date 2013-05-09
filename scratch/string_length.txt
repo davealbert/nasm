@@ -1,0 +1,42 @@
+;-------------------------
+;First version
+;
+movzxlen:
+      push ebx
+      mov  eax, ebx
+
+lp:
+      cmp byte [eax], 0
+      jz  lpend
+      inc eax
+      jmp lp
+
+lpend:
+      sub eax, ebx
+
+      pop ebx
+      ret
+
+
+
+;-------------------------
+;Secondversion
+;
+len:
+    push ebx
+    mov ecx,0
+    dec ebx
+
+count:
+    inc ecx
+    inc ebx
+    cmp byte[ebx],0
+    jnz count
+
+    dec ecx
+
+    pop ebx
+    ret
+
+
+
