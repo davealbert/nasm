@@ -1,12 +1,13 @@
-sys_exit        equ     1
-sys_write       equ     4
-stdout          equ     1
-endOfLine				db  		0x0A
-endOfLineLen 		equ 		$-endOfLine
+section .data
+	sys_exit        equ     1
+	sys_write       equ     4
+	stdout          equ     1
+	endOfLine				db  		0x0A
+	endOfLineLen 		equ 		$-endOfLine
 
 
 section .bss
-	outputBuffer    resb    4
+	outputBuffer    resb 		4
 
 
 section .text
@@ -14,7 +15,7 @@ section .text
 
 
 _start:
-	mov  esi, -9  							; Number 1
+	mov  esi, -9  						; Number 1
 	call loop
 	call _exit
 
